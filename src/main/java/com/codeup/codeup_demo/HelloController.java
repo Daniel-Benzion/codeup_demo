@@ -1,11 +1,11 @@
 package com.codeup.codeup_demo;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 class HelloController {
-
 	@GetMapping("/hello")
 	@ResponseBody
 	public String hello() {
@@ -13,9 +13,9 @@ class HelloController {
 	}
 
 	@GetMapping("/hello/{name}")
-	@ResponseBody
-	public String sayHello(@PathVariable String name) {
-		return "Hello " + name + "!";
+	public String sayHello(@PathVariable String name, Model model) {
+		model.addAttribute("name" , name);
+		return "hello";
 	}
 
 	@RequestMapping(path = "/increment/{number}", method = RequestMethod.GET)
