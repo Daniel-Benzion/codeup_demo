@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+<h1>You rolled: <span th:text="${guess}"></span></h1>
+<h2>The computer rolled:</h2>
+<div th:each="roll : ${rolls}">
+    <div th:text="${roll}"></div>
+</div>
+<h3>You were correct <span th:text="${correct}"></span>/6 times!</h3>
+<h4><a href="/roll-dice">Play again?</a></h4>
+</body>
+</html>
