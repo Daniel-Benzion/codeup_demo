@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class PostController {
 
@@ -16,27 +18,45 @@ public class PostController {
 	}
 
 	@GetMapping("/posts")
-	public String index(Model model) {
-		model.addAttribute("posts", postDao.findAll());
+	public String seeAllPosts(Model model) {
+		List<Post> postList = postDao.findAll();
+		model.addAttribute("posts", postList);
 		return "posts/index";
 	}
 
 	@GetMapping("/posts/{id}")
-	@ResponseBody
-	public String getPost(@PathVariable String id) {
-		return "View individual post. ID: " + id;
+	public String showOnePost(@PathVariable long id, Model model) {
+		Post test;
+		if (postDao.findById(id).isPresent()){
+			test = postDao.getOne(id);
+		} else {
+			return "redirect:/posts";
+		}
+		model.addAttribute("post", test);
+		model.addAttribute("id", id);
+		return "posts/show";
 	}
 
 	@GetMapping("/posts/create")
-	@ResponseBody
 	public String viewCreatePost() {
-		return "Post creation form.";
+		return "posts/create";
 	}
 
 	@PostMapping("/posts/create")
-	@ResponseBody
-	public String createPost() {
-		return "Post created.";
+	public String createPost(@RequestParam("title") String title, @RequestParam("body") String body) {
+		Post newPost = new Post(title, body);
+		postDao.save(newPost);
+		return "redirect:/posts";
+	}
+
+	@GetMapping("/posts/{id}/delete")
+	public String showDeletePost(@PathVariable long id, Model model){
+
+		Post dbPost = postDao.getOne(id);
+
+		model.addAttribute("dbPost", dbPost);
+
+		return "posts/delete";
 	}
 
 	@PostMapping("/posts/{id}/delete")
@@ -45,15 +65,18 @@ public class PostController {
 		return "redirect:/posts";
 	}
 
-	@PostMapping("/posts/{id}/edit")
-	public String editPost(
-			@PathVariable long id,
-			@ModelAttribute Post editedPost
-	){
+	@GetMapping("/posts/{id}/update")
+	public String showUpdatePost(@PathVariable long id, Model model){
 
 		Post dbPost = postDao.getOne(id);
-		dbPost.setTitle(editedPost.getTitle());
-		dbPost.setBody(editedPost.getBody());
+
+		model.addAttribute("dbPost", dbPost);
+
+		return "posts/update";
+	}
+
+	@PostMapping("/posts/{id}/update")
+	public String updatePost(@PathVariable long id, @ModelAttribute Post dbPost) {
 		postDao.save(dbPost);
 		return "redirect:/posts";
 	}
