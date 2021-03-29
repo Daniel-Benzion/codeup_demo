@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Post</title>
+</head>
+<body>
+
+<form th:action="${'/posts/'+ dbPost.getId() +'/update'}" method="post">
+
+    <h2>Update Your Post</h2>
+
+    <br>
+
+    <label for="title">Title</label>
+    <input name="title" id="title" type="text" th:value="${dbPost.getTitle()}">
+
+    <br>
+
+    <label for="body">Body</label>
+    <input name="body" id="body" type="text" th:value="${dbPost.getBody()}">
+
+    <br>
+
+    <input type="submit" value="Update Post!">
+
+</form>
+
+</body>
+</html>
