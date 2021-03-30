@@ -8,6 +8,7 @@
 <div class="container">
     <h1 th:text="${post.getTitle()}"></h1>
     <p th:text="${post.getBody()}"></p>
+    <p th:text="${post.owner.getEmail()}"></p>
     <form th:action="${'/posts/'+ post.getId() +'/update'}" method="GET">
         <input type="submit" value="Update Post">
     </form>
