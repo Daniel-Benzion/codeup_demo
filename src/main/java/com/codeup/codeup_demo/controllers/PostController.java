@@ -45,16 +45,16 @@ public class PostController {
 	}
 
 	@GetMapping("/posts/create")
-	public String viewCreatePost() {
+	public String viewCreatePost(Model model) {
+		model.addAttribute("post",new Post());
 		return "posts/create";
 	}
 
 	@PostMapping("/posts/create")
-	public String createPost(@RequestParam("title") String title, @RequestParam("body") String body) {
+	public String createPost(@ModelAttribute Post post) {
 		User owner = userDao.getOne(1L);
-		Post newPost = new Post(title, body, owner);
-		newPost.setOwner(owner);
-		postDao.save(newPost);
+		post.setOwner(owner);
+		postDao.save(post);
 		return "redirect:/posts";
 	}
 
