@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div th:each="post : ${posts}" class="container">
-    <div class="card">
-        <div class="card-body">
-            <h1 th:text="${post.getTitle()}" ></h1>
-            <p th:text="${post.getBody()}" ></p>
-            <p th:text="${post.getOwner().getEmail()}" ></p>
-        </div>
-        <form th:action="${'/posts/'+ post.getId()}" method="GET">
-            <input type="submit" value="View Post">
-        </form>
-    </div>
+    <h1 th:text="${post.getTitle()}"></h1>
+    <p th:text="${post.getBody()}"></p>
+    <p th:text="${post.getOwner().getEmail()}"></p>
+
+    <form th:action="@{/posts/{id}(id=${post.getId()})}" method="GET">
+        <input type="submit" value="View Post">
+    </form>
 </div>
 <div>
-    <form th:action="${'/posts/create'}" method="GET">
+    <form th:action="@{/posts/create}" method="GET">
         <input type="submit" value="Create Post">
     </form>
 </div>
