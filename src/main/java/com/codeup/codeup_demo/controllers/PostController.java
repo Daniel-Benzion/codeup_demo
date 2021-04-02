@@ -5,6 +5,7 @@ import com.codeup.codeup_demo.models.User;
 import com.codeup.codeup_demo.repo.PostRepository;
 import com.codeup.codeup_demo.repo.UserRepository;
 import com.codeup.codeup_demo.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,13 +50,13 @@ public class PostController {
 
 	@GetMapping("/posts/create")
 	public String viewCreatePost(Model model) {
-		model.addAttribute("post",new Post());
+		model.addAttribute("post", new Post());
 		return "posts/create";
 	}
 
 	@PostMapping("/posts/create")
 	public String createPost(@ModelAttribute Post post) {
-		User owner = userDao.getOne(1L);
+		User owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		post.setOwner(owner);
 		Post dbPost = postDao.save(post);
 		emailService.prepareAndSend(dbPost,"Post created","A post has been created.");
@@ -65,9 +66,9 @@ public class PostController {
 	@GetMapping("/posts/{id}/delete")
 	public String showDeletePost(@PathVariable long id, Model model){
 
-		Post dbPost = postDao.getOne(id);
+		Post post = postDao.getOne(id);
 
-		model.addAttribute("dbPost", dbPost);
+		model.addAttribute("post", post);
 
 		return "posts/delete";
 	}
@@ -81,16 +82,18 @@ public class PostController {
 	@GetMapping("/posts/{id}/update")
 	public String showUpdatePost(@PathVariable long id, Model model){
 
-		Post dbPost = postDao.getOne(id);
+		Post post = postDao.getOne(id);
 
-		model.addAttribute("dbPost", dbPost);
+		model.addAttribute("post", post);
 
 		return "posts/update";
 	}
 
 	@PostMapping("/posts/{id}/update")
-	public String updatePost(@PathVariable long id, @ModelAttribute Post dbPost) {
-		postDao.save(dbPost);
+	public String updatePost(@PathVariable long id, @ModelAttribute Post post) {
+		User owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		post.setOwner(owner);
+		postDao.save(post);
 		return "redirect:/posts";
 	}
 }
