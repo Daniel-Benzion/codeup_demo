@@ -6,10 +6,10 @@
 </head>
 <body>
 <div class="container">
-    <h1 th:text="${dbPost.getTitle()}"></h1>
-    <p th:text="${dbPost.getBody()}"></p>
+    <h1 th:text="${post.getTitle()}"></h1>
+    <p th:text="${post.getBody()}"></p>
     <h2>Are you sure you wish to delete this post? Once you do this, it cannot be undone.</h2>
-    <form th:action="${'/posts/'+ dbPost.getId() +'/delete'}" method="POST">
+    <form th:action="@{/posts/{id}/delete(id=${post.getId()})}" method="POST">
         <input type="submit" value="Delete Post">
     </form>
 </div>
