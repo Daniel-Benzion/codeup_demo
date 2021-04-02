@@ -1,7 +1,5 @@
 package com.codeup.codeup_demo.models;
 
-import com.codeup.codeup_demo.util.Password;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class User {
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.password = password;
+		setPassword(password);
 		this.posts = posts;
 	}
 
@@ -79,7 +77,7 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.password = Password.hash(password);
+		this.password = password;
 	}
 
 	public List<Post> getPosts() {
